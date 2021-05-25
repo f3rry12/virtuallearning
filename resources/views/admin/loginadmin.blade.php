@@ -34,7 +34,7 @@
     <div>{{Session::get('alert-success')}}</div>
 </div>
 @endif
-<form action="{{ url('/loginPost') }}" method="post" style="margin:80px;">
+<form action="{{ url('/loginadminPost') }}" method="post" style="margin:80px;">
 {{ csrf_field() }}
 <div class="form-group"
     <label for="username">Username:</label>

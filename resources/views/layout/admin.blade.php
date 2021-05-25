@@ -14,11 +14,11 @@
 <body>
 <nav class="navbar navbar-light bg-light">
   <a class="navbar-brand" href="#">
-    <img src="img/assets/logo_sekolah.png" width="98" height="30" class="d-inline-block align-top" alt="">
+    <img src="{{asset('img/assets/logo_sekolah.png')}}" width="98" height="30" class="d-inline-block align-top" alt="">
   </a>
   <div class="ms-auto">
   Anda login sebagai {{$name}}
-  <a href="Logout">(Logout)</a>
+  <a href="{{ url('/logoutadmin') }}">(Logout)</a>
   </div>
 
 </nav>
