@@ -11,13 +11,24 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/beranda', 'HomeController@index');
-Route::get('/class', 'ClassController@index');
-Route::get('/class/{kodeKelas}', 'ClassController@show');
+Route::get('/', 'HomeController@index');
+Route::get('/login', 'HomeController@index');
+Route::post('/loginPost', 'HomeController@loginPost');
+Route::get('/logout', 'HomeController@logout');
+
+//Guru
+Route::get('/guru', 'GuruController@index');
+//guru kelas
+Route::post('/{kodeguru}/tambahkelasPost', 'GuruController@buatkelasPost');
+Route::get('/guru/kelas/{kodekelas}', 'GuruController@indexkelas');
+
+//Siswa
+Route::get('/siswa', 'SiswaController@index');
+//siswa kelas
+Route::post('/{NIS}/confirmmasukkelas', 'SiswaController@confirmkelas');
+Route::post('/{NIS}/masukkelasPost/{kodekelas}', 'SiswaController@masukkelasPost');
+Route::get('/siswa/kelas/{kodekelas}', 'SiswaController@indexkelas');
 
 //admin login session
 Route::get('/loginadmin', 'AdminController@login');
