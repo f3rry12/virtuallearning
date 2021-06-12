@@ -13,6 +13,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     
     <script src="https://kit.fontawesome.com/c1452f204d.js" crossorigin="anonymous"></script>
+
+   
 </head>
 <body>
 <nav class="navbar navbar-dark bg-primary">
@@ -20,8 +22,8 @@
     <img src="{{asset('img/assets/logo_sekolah.png')}}" height="40" class="d-inline-block align-top" alt="">
   </a>
   <div class="text-white ms-auto">
-  Anda login sebagai {{$name}}
-  <a href="{{ url('/editprofilguru/'.$kodeguru) }}"></a>
+  Anda login sebagai
+  <a href="{{ url('/guru/profilguru/') }}" class="text-white">  {{Session::get('name')}}</a>
   <a href="{{ url('/logout') }}"><button type="button" class="btn btn-danger mb-1 ml-1">Logout</button></a>
   </div>
   </nav>
@@ -44,19 +46,13 @@
                 <small>MAIN MENU</small>
             </li>
             <!-- /END Separator -->
-            <a href="#" class="bg-dark list-group-item list-group-item-action">
+            <a href="{{url('/guru')}}" class="bg-dark list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-start align-items-center">
                     <span class="fa fa-chalkboard-teacher fa-fw mr-3"></span>
                     <span class="menu-collapsed">Kelas</span>
                 </div>
             </a>
-            <a href="#" class="bg-dark list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-start align-items-center">
-                    <span class="fa fa-book fa-fw mr-3"></span>
-                    <span class="menu-collapsed">Materi</span>
-                </div>
-            </a>
-            <a href="#" class="bg-dark list-group-item list-group-item-action">
+            <a href="{{url('/guru/listtugas')}}" class="bg-dark list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-start align-items-center">
                     <span class="fa fa-tasks fa-fw mr-3"></span>
                     <span class="menu-collapsed">Tugas <span class="badge badge-pill badge-primary ml-2">5</span></span>
@@ -82,13 +78,13 @@
                 <small>PROFIL</small>
             </li>
             <!-- /END Separator -->
-            <a href="#" class="bg-dark list-group-item list-group-item-action">
+            <a href="{{ url('/guru/profilguru/') }}" class="bg-dark list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-start align-items-center">
                     <span class="fa fa-user fa-fw mr-3"></span>
                     <span class="menu-collapsed">Edit Profil</span>
                 </div>
             </a>
-            <a href="#" class="bg-dark list-group-item list-group-item-action">
+            <a href="{{ url('/logout') }}" class="bg-dark list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-start align-items-center">
                     <span class="fa fa-sign-out-alt fa-fw mr-3"></span>
                     <span class="menu-collapsed">Logout</span>

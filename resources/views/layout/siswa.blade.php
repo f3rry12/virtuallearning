@@ -20,8 +20,8 @@
     <img src="{{asset('img/assets/logo_sekolah.png')}}" height="40" class="d-inline-block align-top" alt="">
   </a>
   <div class="text-white ms-auto">
-  Anda login sebagai {{$name}}
-  <a href="{{ url('/editprofilsiswa/'.$NIS) }}"></a>
+  Anda login sebagai 
+  <a href="{{ url('/siswa/profilsiswa/') }}" class="text-white">{{Session::get('name')}}</a>
   <a href="{{ url('/logout') }}"><button type="button" class="btn btn-danger mb-1 ml-1">Logout</button></a>
   </div>
   </nav>
@@ -44,7 +44,7 @@
                 <small>MAIN MENU</small>
             </li>
             <!-- /END Separator -->
-            <a href="#" class="bg-dark list-group-item list-group-item-action">
+            <a href="{{url('/siswa')}}" class="bg-dark list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-start align-items-center">
                     <span class="fa fa-chalkboard-teacher fa-fw mr-3"></span>
                     <span class="menu-collapsed">Kelas</span>
@@ -76,13 +76,13 @@
                 <small>PROFIL</small>
             </li>
             <!-- /END Separator -->
-            <a href="#" class="bg-dark list-group-item list-group-item-action">
+            <a href="{{ url('/siswa/profilsiswa/') }}" class="bg-dark list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-start align-items-center">
                     <span class="fa fa-user fa-fw mr-3"></span>
                     <span class="menu-collapsed">Edit Profil</span>
                 </div>
             </a>
-            <a href="#" class="bg-dark list-group-item list-group-item-action">
+            <a href="{{ url('/logout') }}" class="bg-dark list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-start align-items-center">
                     <span class="fa fa-sign-out-alt fa-fw mr-3"></span>
                     <span class="menu-collapsed">Logout</span>

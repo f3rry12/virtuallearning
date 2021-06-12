@@ -19,7 +19,7 @@
   <div class="card">
   <div class="card-body">
     <h5 class="card-title">{{$kelas->nama_kelas}}</h5>
-    <p class="card-text">Pengajar </p>
+    <p class="card-text">Pengajar {{$kelas->nama_guru}}</p>
   </div>
 </div>
 </a>

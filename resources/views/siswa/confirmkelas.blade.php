@@ -8,8 +8,8 @@
 <p>Apakah ini kelas yang tepat?</p>
 <div class="row">
     <div class="col m-3 border-0">
-    <a href="{{ url('/siswa') }}"><button class="btn btn-primary mr-3">Kembali ke beranda</button></a>
-    <a href="{{ url($NIS.'/masukkelasPost'.$kelas->kode_kelas) }}"><button class="btn btn-primary">Masuk ke kelas</button></a>
+    <a href="{{ url('/siswa') }}"><button class="btn btn-secondary mb-3">Kembali ke beranda</button></a>
+    <form action="{{ url('/siswa/masukkelasPost/'.$kelas->kode_kelas) }}" method="post">{{csrf_field()}}<button class="btn btn-primary">Masuk ke kelas</button></form>
     </div>
 </div>
 </div>

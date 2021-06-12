@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use App\Guru;
 use App\Siswa;
+
 
 class HomeController extends Controller
 {
@@ -85,5 +88,17 @@ class HomeController extends Controller
         public function logout(){
             Session::flush();
             return redirect(url('/'));
+        }
+
+        //untuk zoom foto
+        public function zoomfoto($loc, $foto){
+            return view('foto',['loc'=>$loc ,'foto'=>$foto]);
+        }
+
+        //untuk download file
+        public function download($loc, $path){
+            $file = public_path('/file/'.$loc.'/'.$path);
+            return Storage::disk('public')->download($file,$path);
+           // return Storage::download('file/'.$loc.'/'.$path);
         }
 }

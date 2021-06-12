@@ -119,7 +119,17 @@ class AdminController extends Controller
           }
     }
   //proses logika untuk edit guru ke database
-    public function editguruPut(Request $request,$kodeguru){
+    public function editguruPut(Request $request,$kodeguru,$username){
+      if ($request->kodeguru!=$kodeguru) {
+        $request->validate([
+          'kodeguru' => 'required|unique:guru,kode_guru|max:16'
+      ]);
+      }
+      if ($request->username!=$username) {
+        $request->validate([
+          'username' => 'required|unique:guru,username|max:16'
+      ]);
+      }
         $request->validate([
             'kodeguru' => 'required|max:16',
             'namaguru' => 'required|max:255',
@@ -194,8 +204,13 @@ class AdminController extends Controller
     }
   //proses logika untuk edit siswa ke database
     public function editsiswaPut(Request $request,$kodesiswa){
+      if ($request->kodesiswa!=$kodesiswa) {
         $request->validate([
-            'kodesiswa' => 'required|max:16',
+          'kodesiswa' => 'required|unique:siswa,NIS|max:24',
+      ]);
+      }
+        $request->validate([
+            'kodesiswa' => 'required|max:24',
             'namasiswa' => 'required|max:255',
             'password' => 'required|max:16',
             'fotoprofil' => 'mimes:jpeg,bmp,png,svg,webp,jpg|max:1024',

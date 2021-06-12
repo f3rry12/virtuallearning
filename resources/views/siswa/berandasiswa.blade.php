@@ -12,7 +12,7 @@
   Masuk Kelas Baru
 </button>
 <hr size="8" width="90%">  
-@if (count($members) < 1)
+@if (count($kelass) < 1)
             <div class="text-center">
             <h3>Anda masih belum masuk ke kelas manapun</h3>
             <button type="button" class="btn btn-primary ml-5 mt-3" data-toggle="modal" data-target="#modalMasukKelas">
@@ -22,12 +22,12 @@
         @else
 
         <div class="d-flex flex-column">
-  @foreach ($members as $member)
-  <a href="#" class="text-dark mb-3">
+  @foreach ($kelass as $kelas)
+  <a href="{{ url('/siswa/kelas/'.$kelas->kode_kelas) }}" class="text-dark mb-3">
   <div class="card">
   <div class="card-body">
-    <h5 class="card-title">{{$member->nama_kelas}}</h5>
-    <p class="card-text">Pengajar </p>
+    <h5 class="card-title">{{$kelas->nama_kelas}}</h5>
+    <p class="card-text">Pengajar {{$kelas->nama_guru}}</p>
   </div>
 </div>
 </a>
