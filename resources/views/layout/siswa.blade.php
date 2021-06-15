@@ -50,16 +50,10 @@
                     <span class="menu-collapsed">Kelas</span>
                 </div>
             </a>
-            <a href="#" class="bg-dark list-group-item list-group-item-action">
+            <a href="{{url('/siswa/listtugas')}}" class="bg-dark list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-start align-items-center">
                     <span class="fa fa-tasks fa-fw mr-3"></span>
-                    <span class="menu-collapsed">Tugas <span class="badge badge-pill badge-primary ml-2">5</span></span>
-                </div>
-            </a>
-            <a href="#" class="bg-dark list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-start align-items-center">
-                    <span class="fa fa-pen fa-fw mr-3"></span>
-                    <span class="menu-collapsed">Ujian</span>
+                    <span class="menu-collapsed">Tugas</span>
                 </div>
             </a>
             <!-- Separator without title -->

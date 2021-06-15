@@ -14,6 +14,7 @@ use App\AnggotaKelas;
 use App\Materi;
 use App\Tugas; 
 use App\JawabanTugas;
+use App\Pengumuman;
 
 class SiswaController extends Controller
 {
@@ -117,11 +118,18 @@ class SiswaController extends Controller
             else{
             $kelas = Kelas::where('kode_kelas',$kodekelas)->first();
             $jumlah = AnggotaKelas::where('kelasKode',$kodekelas)->count()+1;
+            $posts = Pengumuman::where('kelas',$kodekelas)
+                                ->latest('pengumuman.created_at')
+                                ->leftJoin('kelas', 'kelas.kode_kelas', '=', 'pengumuman.kelas')
+                                ->leftJoin('guru', 'guru.kode_guru', '=', 'kelas.pengajar')
+                                ->select(DB::raw('null as judul'),'keterangan','id_pengumuman','nama_kelas','nama_guru','pengumuman.created_at', DB::raw('null as deadine'));    
+
             $materis = Materi::where('kelas',$kodekelas)
                                 ->latest('materi.created_at')
                                 ->leftJoin('kelas', 'kelas.kode_kelas', '=', 'materi.kelas')
                                 ->leftJoin('guru', 'guru.kode_guru', '=', 'kelas.pengajar')
-                                ->select('judul','penjelasan','id_materi','nama_kelas','nama_guru','materi.created_at', 'materi.created_at as deadline');
+                                ->select('judul','penjelasan','id_materi','nama_kelas','nama_guru','materi.created_at', DB::raw('null as deadine'))
+                                ->union($posts);
 
             $tugass = Tugas::where('kelas',$kodekelas)
                                 ->leftJoin('kelas', 'kelas.kode_kelas', '=', 'tugas.kelas')
@@ -239,5 +247,26 @@ class SiswaController extends Controller
             $idtugas= JawabanTugas::find($idjawaban)->value('idtugas');
             return redirect('/siswa/tugas/'.$idtugas); 
         }
+
+            //menuju halaman daftar tugas
+            public function listtugas(){
+                if(!Session::get('isloginsiswa')){
+                    return $this->redirectsiswa();
+                }
+                else{
+                $NIS = Session::get('NIS'); 
+                $tugass = DB::table('anggotaKelas')
+                                    ->where('NISsiswa',$NIS)
+                                    ->rightJoin('tugas', 'anggotaKelas.kelaskode', '=', 'tugas.kelas')
+                                    ->leftJoin('kelas', 'anggotaKelas.kelaskode', '=', 'kelas.kode_kelas')
+                                    ->leftJoin('guru', 'guru.kode_guru', '=', 'kelas.pengajar')
+                                    ->select('judul','penjelasan','id_tugas as id','nama_kelas','nama_guru','tugas.created_at', 'deadline')
+                                    ->oldest('deadline')
+                                    ->get(); 
+                       //dd($tugass);                       
+                $name = Session::get('name');          
+                return view('siswa/listtugas',['name'=>$name ,'NIS'=>$NIS,'tugass'=>$tugass]);
+                }
+            }
 
 }

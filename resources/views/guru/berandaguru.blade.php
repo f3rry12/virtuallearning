@@ -1,6 +1,15 @@
 @extends('layout.guru')
 @section('title','Beranda Guru')
 @section('content')
+<!--untuk menunjukkan kesalahan / error -->
+@if(count($errors)>0)
+<ul class="jumbotron">
+  @foreach ($errors->all() as $error)
+    <li>{{ $error }}</li>
+  @endforeach
+</ul>
+@endif
+
 <button type="button" class="btn btn-primary ml-5 mt-3" data-toggle="modal" data-target="#modalBuatKelas">
   Buat Kelas Baru
 </button>

@@ -40,6 +40,12 @@ Route::get('/guru/editkelas/{kodekelas}', 'GuruController@editkelas');
 //trigger proses logika edit kelas
 Route::put('/guru/editkelasPut/{kodekelas}', 'GuruController@editkelasPut');
 
+//guru Pengumuman
+//guru logika tambah pengumuman
+Route::post('/guru/pengumumanpost/{kodekelas}', 'GuruController@pengumumanPost');
+//trigger proses logika edit pengumuman
+Route::put('/guru/pengumumanput', 'GuruController@pengumumanPut');
+
 //guru Materi
 //Menuju halaman bagi materi
 Route::get('/guru/bagimateri/{kodekelas}', 'GuruController@bagimateri');
@@ -67,7 +73,8 @@ Route::get('/guru/listtugas', 'GuruController@listtugas');
 Route::get('/guru/daftarnilai/{idtugas}', 'GuruController@listnilai');
 //Menuju halaman penilaian
 Route::get('/guru/penilaian/{idjawaban}', 'GuruController@nilai');
-
+//trigger proses logika edit tugas
+Route::put('/guru/nilaiPut/{idjawaban}', 'GuruController@nilaiPut');
 
 //Siswa
 Route::get('/siswa', 'SiswaController@index');
@@ -87,6 +94,8 @@ Route::get('/siswa/tugas/{idtugas}', 'SiswaController@detailtugas');
 Route::post('/siswa/submitjawabanpost/{idtugas}', 'SiswaController@submitjawabanPost');
 //trigger proses logika edit tugas
 Route::put('/siswa/editjawabanPut/{idjawaban}', 'SiswaController@editjawabanPut');
+//Menuju halaman list tugas
+Route::get('/siswa/listtugas', 'SiswaController@listtugas');
 
 //siswa kelas
 Route::post('/{NIS}/confirmmasukkelas', 'SiswaController@confirmkelas');

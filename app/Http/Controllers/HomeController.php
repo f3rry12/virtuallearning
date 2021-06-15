@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Guru;
 use App\Siswa;
+use App\Materi;
+use App\Tugas;
 
 
 class HomeController extends Controller

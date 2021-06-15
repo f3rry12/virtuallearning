@@ -14,6 +14,7 @@ use App\AnggotaKelas;
 use App\Materi;
 use App\Tugas;
 use App\JawabanTugas;
+use App\Pengumuman;
 
 class GuruController extends Controller
 {
@@ -88,10 +89,10 @@ class GuruController extends Controller
         }
 
         public function buatkelasPost(Request $request,$kodeguru){    
+            $kodeguru = Session::get('kodeguru');  
             $request->validate([
-                'nama_kelas' => 'required|max:99',
+                'namakelas' => 'required|max:99'
             ]);
-            
             do {
                 $random_string = Str::random(6);
                 $lastKelaskode = Kelas::latest()->select('kode_kelas')->first();
@@ -104,7 +105,7 @@ class GuruController extends Controller
             ]);
 
             $name = Session::get('name');
-            $kodeguru = Session::get('kodeguru');            
+   
             return view('guru/tambahkelas',['name'=>$name ,'kodeguru'=>$kodeguru,'kodekelas'=>$random_string,'namakelas' => $request->namakelas]);
         }
 
@@ -115,11 +116,18 @@ class GuruController extends Controller
             else{
             $kelas = Kelas::where('kode_kelas',$kodekelas)->first();
             $jumlah = AnggotaKelas::where('kelasKode',$kodekelas)->count()+1;
+            $posts = Pengumuman::where('kelas',$kodekelas)
+                                ->latest('pengumuman.created_at')
+                                ->leftJoin('kelas', 'kelas.kode_kelas', '=', 'pengumuman.kelas')
+                                ->leftJoin('guru', 'guru.kode_guru', '=', 'kelas.pengajar')
+                                ->select(DB::raw('null as judul'),'keterangan','id_pengumuman','nama_kelas','nama_guru','pengumuman.created_at', DB::raw('null as deadine'));
+
             $materis = Materi::where('kelas',$kodekelas)
                                 ->latest('materi.created_at')
                                 ->leftJoin('kelas', 'kelas.kode_kelas', '=', 'materi.kelas')
                                 ->leftJoin('guru', 'guru.kode_guru', '=', 'kelas.pengajar')
-                                ->select('judul','penjelasan','id_materi','nama_kelas','nama_guru','materi.created_at', 'materi.created_at as deadline');
+                                ->select('judul','penjelasan','id_materi','nama_kelas','nama_guru','materi.created_at', DB::raw('null as deadine'))
+                                ->union($posts);
 
             $tugass = Tugas::where('kelas',$kodekelas)
                                 ->leftJoin('kelas', 'kelas.kode_kelas', '=', 'tugas.kelas')
@@ -129,7 +137,7 @@ class GuruController extends Controller
                                 ->latest('created_at')
                                 ->get(); 
                                           
-               // dd($tugass);
+               //dd($tugass);
             $name = Session::get('name');
             $kodeguru = Session::get('kodeguru');           
             return view('guru/kelasguru',['name'=>$name ,'kodeguru'=>$kodeguru,'kelas'=>$kelas,'jumlah'=>$jumlah, 'agendas'=>$tugass]);
@@ -180,6 +188,38 @@ class GuruController extends Controller
         return redirect('/guru/kelas/'.$kodekelas);
         }
 
+        //Pengumuman
+        public function pengumumanPost(Request $request,$kodekelas){    
+            $request->validate([
+                'keterangan' => 'required|max:255'
+            ]);
+            
+            $lastPostID = Pengumuman::latest()->value('id_pengumuman');
+                $lastPostID = (int)substr($lastPostID , 4);
+                $idPost = 'PEN-'.$lastPostID+1;
+            Pengumuman::create([
+                'id_pengumuman' => $idPost,
+                'keterangan' => $request->keterangan,
+                'kelas' => $kodekelas   
+            ]);
+
+            $name = Session::get('name');
+            $kodeguru = Session::get('kodeguru');   
+            return redirect('/guru/kelas/'.$kodekelas); 
+        }
+
+            //proses logika untuk edit pengumuman ke database
+            public function pengumumanPut(Request $request){
+                $request->validate([
+                    'keterangan' => 'required|max:255'
+                ]);
+                $idpengumuman = $request->pengumumanId;
+                Pengumuman::find($idpengumuman)->update([
+                    'keterangan' => $request->keterangan
+                ]);
+                $kodekelas = Pengumuman::find($idpengumuman)->value('kelas');
+                return redirect('/guru/kelas/'.$kodekelas); 
+            }
 
             //Menuju halaman bagi materi
         public function bagimateri($kodekelas){  
@@ -378,17 +418,51 @@ class GuruController extends Controller
                 else{
                 $kodeguru = Session::get('kodeguru'); 
                 $tugas = Tugas::find($idtugas);
+
+                $jawaban = DB::table('jawabantugas')
+                                ->where('idtugas',$idtugas);
+
                 $members = DB::table('anggotakelas')
                                 ->where('kelasKode',$tugas->kelas)
                                 ->leftJoin('siswa', 'anggotakelas.NISsiswa', '=', 'siswa.NIS')
-                                //->leftJoin('jawabanTugas', 'jawabanTugas.NISsiswa', '=', 'anggotakelas.NISsiswa')
+                                ->leftJoinSub($jawaban, 'jawaban', function ($join) {
+                                    $join->on('anggotakelas.NISsiswa', '=', 'jawaban.NISsiswa');})
+                                ->select('NIS','nama_siswa','jawaban.created_at as submit','id_jawaban','nilai')
                                 ->get();
 
                                               
-                dd($members);
+                //dd($members);
                 $name = Session::get('name');          
-                return view('guru/penilaian/listtugas',['name'=>$name ,'kodeguru'=>$kodeguru,'tugass'=>$tugass]);
+                return view('guru/penilaian/listnilai',['name'=>$name ,'kodeguru'=>$kodeguru,'members'=>$members,'tugas'=>$tugas]);
                 }
             }
 
+            //menuju halaman penilaian
+            public function nilai($idjawaban){
+                if(!Session::get('isloginguru')){
+                    return $this->redirectguru();
+                }
+                else{
+                $jawaban = JawabanTugas::find($idjawaban);
+                $tugas = Tugas::find($jawaban->idtugas);
+                                    
+                $name = Session::get('name');
+                $kodeguru = Session::get('kodeguru');          
+                return view('guru/penilaian/nilaitugas',['name'=>$name ,'kodeguru'=>$kodeguru,'jawaban'=>$jawaban,'tugas'=>$tugas]);
+                }                
+            } 
+
+        //proses logika untuk memberi nilai ke database
+        public function nilaiPut(Request $request,$idjawaban){
+
+            $request->validate([
+                'nilai' => 'required|max:3'
+            ]);
+            JawabanTugas::find($idjawaban)->update([
+                'nilai' => $request->nilai
+            ]);
+            $idtugas= JawabanTugas::find($idjawaban)->value('idtugas');
+            return redirect('/guru/daftarnilai/'.$idtugas); 
+        }
+            
 }
