@@ -14,19 +14,24 @@
 <div class="d-flex flex-column">
     @foreach ($tugass as $tugas)
     @php
+        $skrg = time();
+        $dl = strtotime($tugas->deadline);
+        if ($skrg > $dl) {
+          $sisa = 'Melebihi deadline';
+        } else {
         $now = new Datetime(date('Y/m/d h:i:s a', time()));
         $datetime2 = new DateTime($tugas->deadline);
         $interval = $now->diff($datetime2);
         $sisa = $interval->format('%d')." Hari ".$interval->format('%h')." Jam ".$interval->format('%i')." Menit";
+        }
     @endphp
     <a href="{{ url('/guru/daftarnilai/'.$tugas->id) }}" class="text-dark mb-3">
       <div class="card">
       <div class="card-body">
-        <h5 class="card-title"><span class="badge badge-danger">Tugas</span>{{$tugas->judul}}</h5>
-        <p class="card-text">{{$tugas->penjelasan}}</p>
+        <h4 class="card-title"><span class="badge badge-danger mr-1">Tugas</span>{{$tugas->judul}}</h4>
+        <p class="card-text">Tugas dibagikan oleh {{$tugas->nama_guru}} pada {{ date('d-m-Y', strtotime($tugas->created_at)) }}</p>
         <p class="card-text">kelas {{$tugas->nama_kelas}}</p>
-        <p class="card-text">Pengajar {{$tugas->nama_guru}}</p>
-        <p class="card-text">{{$sisa}}</p>
+        <p class="card-text"><i class="fas fa-hourglass-start"></i> {{$sisa}}</p>
       </div>
     </div>
     </a>

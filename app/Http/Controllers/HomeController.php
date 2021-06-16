@@ -99,8 +99,6 @@ class HomeController extends Controller
 
         //untuk download file
         public function download($loc, $path){
-            $file = public_path('/file/'.$loc.'/'.$path);
-            return Storage::disk('public')->download($file,$path);
-           // return Storage::download('file/'.$loc.'/'.$path);
+            return Storage::disk('local')->download($loc.'/'.$path);
         }
 }

@@ -243,7 +243,8 @@ class GuruController extends Controller
                $fileName =null;
                if($request->filemateri){
                 $fileName = $request->filemateri->getClientOriginalName().'-'.time().'.'.$request->filemateri->extension();
-                $request->filemateri->move(public_path('file/materi'),$fileName); 
+                // $request->filemateri->move(public_path('file/materi'),$fileName); 
+                $request->file('filemateri')->storeAs('materi', $fileName);
                }
 
                 $lastMateriID = Materi::latest()->value('id_materi');
@@ -289,7 +290,7 @@ class GuruController extends Controller
                 ]);
                 if($request->filemateri){
                 $fileName = $request->filemateri->getClientOriginalName().'-'.time().'.'.$request->filemateri->extension();
-                $request->filemateri->move(public_path('file/materi'),$fileName); 
+                $request->file('filemateri')->storeAs('materi', $fileName);
                 Materi::find($idmateri)->update(['file_path' => $fileName]);
                 }
                 Materi::find($idmateri)->update([
@@ -323,7 +324,7 @@ class GuruController extends Controller
                 $fileName =null;
                 if($request->filetugas){
                     $fileName = $request->filetugas->getClientOriginalName().'-'.time().'.'.$request->filetugas->extension();
-                    $request->filetugas->move(public_path('file/tugas'),$fileName); 
+                    $request->file('filetugas')->storeAs('tugas', $fileName); 
                 }
 
                 $fotoName =null;
@@ -373,7 +374,7 @@ class GuruController extends Controller
                 ]);
                 if($request->file){
                 $fileName = $request->file->getClientOriginalName().'-'.time().'.'.$request->file->extension();
-                $request->file->move(public_path('file/tugas'),$fileName); 
+                $request->file('file')->storeAs('tugas', $fileName); 
                 Tugas::find($idtugas)->update(['file_path' => $fileName]);
                 }
                 if($request->foto){
@@ -461,7 +462,7 @@ class GuruController extends Controller
             JawabanTugas::find($idjawaban)->update([
                 'nilai' => $request->nilai
             ]);
-            $idtugas= JawabanTugas::find($idjawaban)->value('idtugas');
+            $idtugas= JawabanTugas::where('id_jawaban',$idjawaban)->value('idtugas');
             return redirect('/guru/daftarnilai/'.$idtugas); 
         }
             

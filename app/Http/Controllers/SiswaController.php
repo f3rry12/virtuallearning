@@ -204,7 +204,7 @@ class SiswaController extends Controller
             $NIS = Session::get('NIS');        
             $request->validate([
                 'keterangan' => 'required|max:255',
-                'filemateri' => 'max:8192'
+                'filetugas' => 'max:8192'
             ]);
             do {
                 $random_string = Str::random(6);
@@ -214,7 +214,7 @@ class SiswaController extends Controller
                $fileName =null;
                if($request->filetugas){
                 $fileName = $request->filetugas->getClientOriginalName().'-'.time().'.'.$request->filetugas->extension();
-                $request->filetugas->move(public_path('file/jawaban'),$fileName); 
+                $request->file('filetugas')->storeAs('jawaban', $fileName);  
                }
 
             JawabanTugas::create([
@@ -238,7 +238,7 @@ class SiswaController extends Controller
             ]);
             if($request->file){
             $fileName = $request->file->getClientOriginalName().'-'.time().'.'.$request->file->extension();
-            $request->file->move(public_path('file/jawaban'),$fileName); 
+            $request->file('file')->storeAs('jawaban', $fileName); 
             JawabanTugas::find($idjawaban)->update(['file_path' => $fileName]);
             }
             JawabanTugas::find($idjawaban)->update([

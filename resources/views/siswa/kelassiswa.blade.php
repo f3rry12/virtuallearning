@@ -2,7 +2,7 @@
 @section('title',$kelas->nama_kelas)
 @section('content')
 <div class="d-flex flex-row mx-5 mt-2">
-<h1 class="mb-0 pb-0 align-self-end p-0">{{strtoupper($kelas->nama_kelas)}}</h1>
+<h1 class="mb-0 pb-0 align-self-end p-0 mr-1">{{strtoupper($kelas->nama_kelas)}}</h1>
 <a href="{{ url('/siswa/member/'.$kelas->kode_kelas) }}" class="badge badge-secondary align-self-end mb-1 mr-auto">Jumlah anggota kelas: {{$jumlah}}</a>
 </div>
 <hr size="8" width="90%">  
@@ -19,38 +19,39 @@
     <a href="{{ url('/siswa/materi/'.$agenda->id) }}" class="text-dark mb-3">
       <div class="card">
       <div class="card-body">
-        <h5 class="card-title"><span class="badge badge-primary">Materi</span>{{$agenda->judul}}</h5>
-        <p class="card-text">{{$agenda->penjelasan}}</p>
-        <p class="card-text">kelas {{$agenda->nama_kelas}}</p>
-        <p class="card-text">Pengajar {{$agenda->nama_guru}}</p>
+        <h4 class="card-title"><span class="badge badge-primary mr-1">Materi</span>{{$agenda->judul}}</h4>
+        <p class="card-text">Materi dibagikan oleh {{$agenda->nama_guru}} pada {{ date('d-m-Y', strtotime($agenda->created_at)) }}</p>
       </div>
     </div>
     </a>
     @elseif (substr($agenda->id,0,3)=='TGS')
     @php
-    $now = new Datetime(date('Y/m/d h:i:s a', time()));
-    $datetime2 = new DateTime($agenda->deadline);
-    $interval = $now->diff($datetime2);
-    $sisa = $interval->format('%d')." Hari ".$interval->format('%h')." Jam ".$interval->format('%i')." Menit";
+        $skrg = time();
+        $dl = strtotime($agenda->deadline);
+        if ($skrg > $dl) {
+          $sisa = 'Melebihi deadline';
+        } else {
+        $now = new Datetime(date('Y/m/d h:i:s a', time()));
+        $datetime2 = new DateTime($agenda->deadline);
+        $interval = $now->diff($datetime2);
+        $sisa = $interval->format('%d')." Hari ".$interval->format('%h')." Jam ".$interval->format('%i')." Menit";
+        }
     @endphp
     <a href="{{ url('/siswa/tugas/'.$agenda->id) }}" class="text-dark mb-3">
       <div class="card">
       <div class="card-body">
-        <h5 class="card-title"><span class="badge badge-danger">Tugas</span>{{$agenda->judul}}</h5>
-        <p class="card-text">{{$agenda->penjelasan}}</p>
-        <p class="card-text">kelas {{$agenda->nama_kelas}}</p>
-        <p class="card-text">Pengajar {{$agenda->nama_guru}}</p>
-        <p class="card-text">{{$sisa}}</p>
+        <h4 class="card-title"><span class="badge badge-danger mr-1">Tugas</span>{{$agenda->judul}}</h4>
+        <p class="card-text">Tugas dibagikan oleh {{$agenda->nama_guru}} pada {{ date('d-m-Y', strtotime($agenda->created_at)) }}</p>
+        <p class="card-text"><i class="fas fa-hourglass-start"></i> {{$sisa}}</p>
       </div>
     </div>
     </a>
     @elseif (substr($agenda->id,0,3)=='PEN')
     <div class="card mb-3">
       <div class="card-body">
-        <h5 class="clearfix">  <span class="badge badge-primary">Pengumuman</span>  </h5>
-        <p class="card-text">{{$agenda->penjelasan}}</p>
-        <p class="card-text">kelas {{$agenda->nama_kelas}}</p>
-        <p class="card-text">Pengajar {{$agenda->nama_guru}}</p>
+        <h4 class="clearfix"><span class="badge badge-primary">Pengumuman</span></h4>
+        <h5 class="card-text">{{$agenda->penjelasan}}</h5>
+        <p class="card-text">Dibagikan oleh {{$agenda->nama_guru}} pada {{ date('d-m-Y', strtotime($agenda->created_at)) }}</p>
       </div>
     </div>
     @endif

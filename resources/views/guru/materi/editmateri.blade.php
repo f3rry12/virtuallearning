@@ -25,7 +25,7 @@
         @endif
         <br> 
         <label>Update File Materi:</label>
-        <input type="file" class="form-file form-control" name="materi" value="">
+        <input type="file" class="form-file form-control" name="filemateri" value="">
   </div>
     </div>
     <div class="col-7">

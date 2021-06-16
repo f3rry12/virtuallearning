@@ -18,7 +18,7 @@
     <div class="col-4 mr-3">
           <div class="form-group">
         @if (is_null($tugas->foto_path))
-            <p>Tidak ada foto penujang tugas</p>
+            {{-- <p>Tidak ada foto penujang tugas</p> --}}
         @else
         <a href="{{ url('foto/tugas/'.$tugas->foto_path) }}" target="_blank" rel="noopener noreferrer">
           <img src="{{asset('img/tugas/'.$tugas->foto_path)}}" alt="foto tugas" height="200" style="border-style: solid">
@@ -28,7 +28,7 @@
     </div>
     <div class="form-group">
         @if (is_null($tugas->file_path))
-            <p>tidak ada file penunjang tugas</p>
+            {{-- <p>tidak ada file penunjang tugas</p> --}}
         @else
             <p>Download : {{$tugas->file_path}}</p>
             <a href="{{ url('download/tugas/'.$tugas->file_path) }}" class="btn btn-primary">Download</a>

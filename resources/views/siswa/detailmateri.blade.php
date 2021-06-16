@@ -18,7 +18,7 @@
     <div class="col-4 mr-3">
     <div class="form-group">
         @if (is_null($materi->file_path))
-            <p>Tidak ada file materi</p>
+            {{-- <p>Tidak ada file materi</p> --}}
         @else
             <p>Download : {{$materi->file_path}}</p>
             <a href="{{ url('download/materi/'.$materi->file_path) }}" class="btn btn-primary">Download</a>

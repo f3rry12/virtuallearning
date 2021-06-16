@@ -2,7 +2,7 @@
 @section('title',$kelas->nama_kelas)
 @section('content')
 <div class="d-flex flex-row mx-5 mt-2">
-<h1 class="mb-0 pb-0 align-self-end p-0 mr-1">{{strtoupper($kelas->nama_kelas)}} </h1>
+<h1 class="mb-0 pb-0 align-self-end p-0">{{strtoupper($kelas->nama_kelas)}} </h1>
 <a href="{{ url('/guru/member/'.$kelas->kode_kelas) }}" class="badge badge-secondary align-self-end mb-1 mr-auto">Jumlah anggota kelas: {{$jumlah}}</a>
 <a href="{{ url('/guru/editkelas/'.$kelas->kode_kelas) }}" class="align-self-end"><button class="btn btn-primary" style="height: 40px;width: 40px"><i class="far fa-edit"></i></button></a>
 </div>
@@ -27,8 +27,10 @@
     <a href="{{ url('/guru/editmateri/'.$agenda->id) }}" class="text-dark mb-3">
       <div class="card">
       <div class="card-body">
-        <h4 class="card-title"><span class="badge badge-primary mr-1">Materi</span>{{$agenda->judul}}</h4>
-        <p class="card-text">Materi dibagikan oleh {{$agenda->nama_guru}} pada {{ date('d-m-Y', strtotime($agenda->created_at)) }}</p>
+        <h5 class="card-title"><span class="badge badge-primary"> Materi</span>{{$agenda->judul}}</h5>
+        <p class="card-text">{{$agenda->penjelasan}}</p>
+        <p class="card-text">kelas {{$agenda->nama_kelas}}</p>
+        <p class="card-text">Pengajar {{$agenda->nama_guru}}</p>
       </div>
     </div>
     </a>
@@ -48,8 +50,10 @@
     <a href="{{ url('/guru/edittugas/'.$agenda->id) }}" class="text-dark mb-3">
       <div class="card">
       <div class="card-body">
-        <h4 class="card-title"><span class="badge badge-danger mr-1">Tugas</span>{{$agenda->judul}}</h4>
-        <p class="card-text">Tugas dibagikan oleh {{$agenda->nama_guru}} pada {{ date('d-m-Y', strtotime($agenda->created_at)) }}</p>
+        <h5 class="card-title"><span class="badge badge-danger"> Tugas</span>{{$agenda->judul}}</h5>
+        <p class="card-text">{{$agenda->penjelasan}}</p>
+        <p class="card-text">kelas {{$agenda->nama_kelas}}</p>
+        <p class="card-text">Pengajar {{$agenda->nama_guru}}</p>
         <p class="card-text"><i class="fas fa-hourglass-start"></i> {{$sisa}}</p>
       </div>
     </div>
@@ -57,12 +61,13 @@
     @elseif (substr($agenda->id,0,3)=='PEN')
     <div class="card mb-3">
       <div class="card-body">
-        <h4 class="clearfix">
+        <h5 class="clearfix">
           <span class="badge badge-primary">Pengumuman</span>
           <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#modaleditpengumuman" data-umum="{{$agenda->penjelasan}}" data-id="{{$agenda->id}}"><i class="far fa-edit"></i></button>
-        </h4>
-        <h5 class="card-text">{{$agenda->penjelasan}}</h5>
-        <p class="card-text">Dibagikan oleh {{$agenda->nama_guru}} pada {{ date('d-m-Y', strtotime($agenda->created_at)) }}</p>
+        </h5>
+        <p class="card-text">{{$agenda->penjelasan}}</p>
+        <p class="card-text">kelas {{$agenda->nama_kelas}}</p>
+        <p class="card-text">Pengajar {{$agenda->nama_guru}}</p>
       </div>
     </div>
     @endif
