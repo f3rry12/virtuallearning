@@ -47,10 +47,15 @@
     </div>
     </a>
     @elseif (substr($agenda->id,0,3)=='PEN')
+    @php
+    $str = $agenda->penjelasan;
+    $url_pattern = '/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/';   
+    $pengumuman= preg_replace($url_pattern, '<a href="$0">$0</a>', $str);
+    @endphp
     <div class="card mb-3">
       <div class="card-body">
         <h4 class="clearfix"><span class="badge badge-primary">Pengumuman</span></h4>
-        <h5 class="card-text">{{$agenda->penjelasan}}</h5>
+        <h5 class="card-text" style="white-space: pre-wrap;"><?php echo $pengumuman ?></h5>
         <p class="card-text">Dibagikan oleh {{$agenda->nama_guru}} pada {{ date('d-m-Y', strtotime($agenda->created_at)) }}</p>
       </div>
     </div>
