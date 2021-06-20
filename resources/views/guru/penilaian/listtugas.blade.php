@@ -64,10 +64,6 @@
         @php
             $skrg = time();
             $dl = strtotime($tugas->deadline);
-            $now = new Datetime(date('Y/m/d h:i:s a', time()));
-            $datetime2 = new DateTime($tugas->deadline);
-            $interval = $now->diff($datetime2);
-            $sisa = $interval->format('%d')." Hari ".$interval->format('%h')." Jam ".$interval->format('%i')." Menit";
         @endphp
         {{-- menampilkan yang sudah leawat deadliane --}}
         @if ($skrg > $dl) 
